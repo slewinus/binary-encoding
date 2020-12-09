@@ -1,3 +1,5 @@
+#class definition 
+
 class Cellule:
     def __init__(self, v, n=None):
         self.value = v
@@ -36,8 +38,12 @@ class Noeud:
     def fils_droit(self):
         return self.droit
 
+#
+with open('data.txt', 'r') as file:
+    data = file.read().replace('\n', '')
 
-string = "Bonjoure fzfzefzef qerg ersg ergedfgvrtvertv"
+print(data)
+string = data
 
 
 def occurences(char, string):
