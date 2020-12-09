@@ -1,46 +1,44 @@
-#class definition 
-
 class Cellule:
-    def __init__(self, v, n=None):
-        self.value = v
-        self.next = n
+	def __init__(self, v, n=None):
+		self.value = v
+		self.next = n
 
 
 class File:
-    def __init__(self):
-        self.v = []
-
-    def est_vide(self):
-        return len(self.v) == 0
-
-    def enfiler(self, x):
-        self.v.insert(0, x)
-
-    def defiler(self):
-        return(self.v.pop())
-
-    def taille(self):
-        return(len(self.v))
+	def __init__(self):
+		self.v = []
+	
+	def est_vide(self):
+		return len(self.v) == 0
+	
+	def enfiler(self, x):
+		self.v.insert(0, x)
+	
+	def defiler(self):
+		return (self.v.pop())
+	
+	def taille(self):
+		return (len(self.v))
 
 
 class Noeud:
-    def __init__(self, g, v, d):
-        self.gauche = g
-        self.droit = d
-        self.valeur = v
+	def __init__(self, g, v, d):
+		self.gauche = g
+		self.droit = d
+		self.valeur = v
+	
+	def donnee(self):
+		return self.valeur
+	
+	def fils_gauche(self):
+		return self.gauche
+	
+	def fils_droit(self):
+		return self.droit
 
-    def donnee(self):
-        return self.valeur
 
-    def fils_gauche(self):
-        return self.gauche
-
-    def fils_droit(self):
-        return self.droit
-
-#
 with open('data.txt', 'r') as file:
-    data = file.read().replace('\n', '')
+	data = file.read().replace('\n', '')
 
 print(data)
 string = data
@@ -54,7 +52,7 @@ def occurences(char, string):
 	for i in string:
 		if i == char:
 			total += 1
-	return(char, total)
+	return char, total
 
 
 def char_list(string):
@@ -75,7 +73,7 @@ def tuple_list(string):
 	"""
 	liste = []
 	l2 = char_list(string)
-	for lettre in l2 :
+	for lettre in l2:
 		liste.append(occurences(lettre, string))
 	return liste
 
@@ -86,7 +84,7 @@ def sort_tuple_list(tuplelist):
 	"""
 	for i in range(len(tuplelist)):
 		minimum = i
-		for j in range(i+1, len(tuplelist)):
+		for j in range(i + 1, len(tuplelist)):
 			if tuplelist[minimum][1] > tuplelist[j][1]:
 				minimum = j
 		tmp = tuplelist[i]
@@ -96,6 +94,9 @@ def sort_tuple_list(tuplelist):
 
 
 def create_tree(tuplelist):
+	""" list(tuple) -> Noeud
+		Retourne un arbre de Huffman contenant chaque lettres de tuplelist
+	"""
 	file = File()
 	for tuple in tuplelist:
 		file.enfiler(tuple)
@@ -112,10 +113,15 @@ def create_tree(tuplelist):
 		file.enfiler((noeud, gauche[1] + droite[1]))
 		file.v = sort_tuple_list(file.v)
 		file.v.reverse()
-	return file.defiler()
+	return file.defiler()[0]
 
 
 def parcours(x, a, t):
+	""" int, Noeud, list -> bool
+		Retourne True si x est présent dans l'arbre a, sinon False.
+		Insere le parcours (inverse) jusqu'a x s'il est present dans a,
+		avec 0 pour aller a gauche et 1 pour aller a droite.
+	"""
 	if a is None:
 		return False
 	elif parcours(x, a.fils_droit(), t):
@@ -130,22 +136,12 @@ def parcours(x, a, t):
 		return False
 
 
-def infixe(a):
-	if a is not None:
-		infixe(a.fils_gauche())
-		print(a.donnee())
-		infixe(a.fils_droit())
-
-
-def prefixe(a):
-	if a is not None:
-		print(a.donnee())
-		prefixe(a.fils_gauche())
-		prefixe(a.fils_droit())
-
-
 def get_keys(string):
-	tree = create_tree(tuple_list(string))[0]
+	""" str -> list(tuple)
+		Retourne la liste des caracteres et du code binaire
+		qu'on leur attribue grace au parcours de l'arbre d'Huffman.
+	"""
+	tree = create_tree(tuple_list(string))
 	keys = []
 	for char in char_list(string):
 		k = []
@@ -154,16 +150,24 @@ def get_keys(string):
 		for i in range(len(k) - 1, -1, - 1):
 			key += str(k[i])
 		keys.append((char, key))
-	return(keys)
+	return keys
 
 
 def get_char_key(char, keys):
+	""" char, list(tuple) -> str
+		Retourne la cle (string) correspondant au caractere
+		char.
+	"""
 	for key in keys:
 		if key[0] == char:
 			return key[1]
 
 
 def compress(string):
+	""" str -> str, list(tuple)
+		Retourne le texte compresse (string) ainsi que les cles
+		permettant de le decompresser.
+	"""
 	compressed = str()
 	keys = get_keys(string)
 	for char in string:
@@ -172,6 +176,10 @@ def compress(string):
 
 
 def eliminate_keys(available, pattern):
+	""" list(tuple), str -> list(tuple)
+		Supprime les cles de available ne respectant pas le modele
+		contenu dans pattern
+	"""
 	av = []
 	for key in range(len(available)):
 		if available[key][1][0:len(pattern)] == pattern:
@@ -180,6 +188,9 @@ def eliminate_keys(available, pattern):
 
 
 def decompress(compressed, keys):
+	""" str, list(tuple) -> str
+		Retourne le texte decompresse grace aux cles keys.
+	"""
 	decompressed = str()
 	i = 0
 	while i < len(compressed):
