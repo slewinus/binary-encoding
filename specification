@@ -11,7 +11,7 @@ For this we will need :
 
 details : 
 
-there will be a text file named "Texte.txt" in which you will find instructions for the correct operation of the algorithm. 
+there will be a text file named "data.txt" in which you will find instructions for the correct operation of the algorithm. 
 
 In the python code we have proceeded by steps which will be detailed in the comments of the code. 
 
