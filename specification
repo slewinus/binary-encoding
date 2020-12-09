@@ -1,0 +1,19 @@
+The objective of this project is to propose an algorithm that would minimize the size of the number of bits in the compressed message.
+For a brief summary, this program will look in the string, which contains the converted text, the number of occurrences of the letters of the alphabet that appear and which will be saved in a list. After obtaining the number of occurrences, we will use the Huffman coding principle to compress the text and decompress it afterwards. 
+
+For this we will need : 
+    - python language 
+    - object-oriented language 
+    - binary trees 
+    - use of queues 
+    - sorting algorithms 
+
+
+details : 
+
+there will be a text file named "Texte.txt" in which you will find instructions for the correct operation of the algorithm. 
+
+In the python code we have proceeded by steps which will be detailed in the comments of the code. 
+
+
+Translated with www.DeepL.com/Translator (free version)
