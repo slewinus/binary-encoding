@@ -143,4 +143,4 @@ def get_keys(string):
         keys.append((char, key))
     return(keys)
 
-get_keys(string)
+print(get_keys(string))
